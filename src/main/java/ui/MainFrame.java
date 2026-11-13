@@ -15,7 +15,7 @@ public class MainFrame extends JFrame {
     private DefaultTableModel tableModel;
 
     public MainFrame() {
-        super("Rubrica Telefonica - Gestione Avanzata");
+        super("Rubrica");
         this.rubrica = new Rubrica();
 
         // Caricamento iniziale da DB
