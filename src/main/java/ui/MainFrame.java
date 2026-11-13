@@ -1,6 +1,6 @@
 package ui;
 
-import dao.PersistenzaManager;
+import dao.DbManager;
 import model.Persona;
 import model.Rubrica;
 
@@ -14,37 +14,45 @@ public class MainFrame extends JFrame {
     private DefaultTableModel tableModel;
 
     public MainFrame() {
-        super("Rubrica Telefonica");
+        super("Rubrica Telefonica - Gestione Avanzata");
         this.rubrica = new Rubrica();
 
-        // Caricamento iniziale da file
-        PersistenzaManager.caricaDaFile(rubrica);
+        // Caricamento iniziale da DB
+        DbManager.caricaDaDb(rubrica);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(650, 450);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        // Creazione JToolBar
+        JToolBar toolBar = new JToolBar();
+        toolBar.setFloatable(false);
+
+        JButton btnNuovo = new JButton("Nuovo Contatto");
+        JButton btnModifica = new JButton("Modifica Selezionato");
+        JButton btnElimina = new JButton("Elimina Selezionato");
+
+        // Button della JToolBar
+        toolBar.add(btnNuovo);
+        toolBar.addSeparator();
+        toolBar.add(btnModifica);
+        toolBar.addSeparator();
+        toolBar.add(btnElimina);
+
+        // Posizioniamo la Toolbar in alto
+        add(toolBar, BorderLayout.NORTH);
 
         // Tabella con nome, cognome, telefono
         String[] colonne = {"Nome", "Cognome", "Telefono"};
         tableModel = new DefaultTableModel(colonne, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Blocca modifica diretta da tabella
+                return false; // Impedisce la modifica diretta da tabella
             }
         };
         table = new JTable(tableModel);
         add(new JScrollPane(table), BorderLayout.CENTER);
-
-        // Button inferiori
-        JPanel panelBottoni = new JPanel();
-        JButton btnNuovo = new JButton("Nuovo");
-        JButton btnModifica = new JButton("Modifica");
-        JButton btnElimina = new JButton("Elimina");
-
-        panelBottoni.add(btnNuovo);
-        panelBottoni.add(btnModifica);
-        panelBottoni.add(btnElimina);
-        add(panelBottoni, BorderLayout.SOUTH);
 
         // Azione button Nuovo
         btnNuovo.addActionListener(e -> {
@@ -52,7 +60,7 @@ public class MainFrame extends JFrame {
             dialog.setVisible(true);
             if (dialog.isSalvato()) {
                 rubrica.aggiungiPersona(dialog.getPersona());
-                PersistenzaManager.salvaSuFile(rubrica); // Salvataggio automatico
+                DbManager.sincronizzaDb(rubrica);
                 aggiornaTabella();
             }
         });
@@ -70,7 +78,7 @@ public class MainFrame extends JFrame {
             dialog.setVisible(true);
             if (dialog.isSalvato()) {
                 rubrica.aggiornaPersona(rigaSelezionata, dialog.getPersona());
-                PersistenzaManager.salvaSuFile(rubrica); // Salvataggio automatico
+                DbManager.sincronizzaDb(rubrica);
                 aggiornaTabella();
             }
         });
@@ -93,7 +101,7 @@ public class MainFrame extends JFrame {
 
             if (conferma == JOptionPane.YES_OPTION) {
                 rubrica.rimuoviPersona(rigaSelezionata);
-                PersistenzaManager.salvaSuFile(rubrica); // Salvataggio automatico
+                DbManager.sincronizzaDb(rubrica);
                 aggiornaTabella();
             }
         });
@@ -103,14 +111,10 @@ public class MainFrame extends JFrame {
     }
 
     public void aggiornaTabella() {
-        tableModel.setRowCount(0); // Pulizia tabella
+        tableModel.setRowCount(0);
         for (Persona p : rubrica.getContatti()) {
             Object[] riga = {p.getNome(), p.getCognome(), p.getTelefono()};
             tableModel.addRow(riga);
         }
-    }
-
-    public Rubrica getRubrica() {
-        return rubrica;
     }
 }

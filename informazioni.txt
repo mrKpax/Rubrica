@@ -1,2 +1,3 @@
 Steve;Jobs;Via Cupertino 13;3334455678;51
 Francesco;Passiatore;Via da Brescia 9;3897656840;24
+Ciao;Caro;Nessuna via snc;3208989876;20

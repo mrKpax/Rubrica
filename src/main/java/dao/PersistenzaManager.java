@@ -1,3 +1,6 @@
+// Vecchio DAO per persistenza su file di testo
+// Attualmente inutilizzato in favore di DbManager
+
 package dao;
 
 import model.Persona;
