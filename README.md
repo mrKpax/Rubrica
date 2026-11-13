@@ -28,7 +28,7 @@ L'archivio del progetto rilasciato (`Rubrica.zip`) contiene:
 
 1. **Configurazione del Database MySQL:**
    * Assicurarsi di avere un server MySQL attivo sulla propria macchina.
-   * Eseguire lo script SQL fornito per creare lo schema e popolare i dati di test[cite: 5]:
+   * Eseguire lo script SQL fornito per creare lo schema e popolare i dati di test:
      ```bash
      mysql -u root -p < schema_database.sql
      ```
