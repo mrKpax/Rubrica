@@ -7,6 +7,7 @@ import model.Rubrica;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.net.URL;
 
 public class MainFrame extends JFrame {
     private Rubrica rubrica;
@@ -28,16 +29,23 @@ public class MainFrame extends JFrame {
         // Creazione JToolBar
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
+        toolBar.setMargin(new Insets(5, 5, 5, 5));
 
-        JButton btnNuovo = new JButton("Nuovo Contatto");
-        JButton btnModifica = new JButton("Modifica Selezionato");
-        JButton btnElimina = new JButton("Elimina Selezionato");
+        JButton btnNuovo = new JButton("", caricaIcona("/icons/nuovo.png"));
+        JButton btnModifica = new JButton("", caricaIcona("/icons/modifica.png"));
+        JButton btnElimina = new JButton("", caricaIcona("/icons/elimina.png"));
+
+        // Rimozione bordi per migliore estetica
+        JButton[] bottoni = {btnNuovo, btnModifica, btnElimina};
+        for (JButton btn : bottoni) {
+            btn.setFocusPainted(false);
+            btn.setContentAreaFilled(false);
+            btn.setBorderPainted(false);
+        }
 
         // Button della JToolBar
         toolBar.add(btnNuovo);
-        toolBar.addSeparator();
         toolBar.add(btnModifica);
-        toolBar.addSeparator();
         toolBar.add(btnElimina);
 
         // Posizioniamo la Toolbar in alto
@@ -115,6 +123,22 @@ public class MainFrame extends JFrame {
         for (Persona p : rubrica.getContatti()) {
             Object[] riga = {p.getNome(), p.getCognome(), p.getTelefono()};
             tableModel.addRow(riga);
+        }
+    }
+
+    // Funzione di caricamento icone dei button
+    private ImageIcon caricaIcona(String percorso) {
+        try {
+            java.net.URL imgURL = getClass().getResource(percorso);
+            if (imgURL != null) {
+                return new ImageIcon(imgURL);
+            } else {
+                System.err.println("Impossibile trovare l'icona: " + percorso);
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Errore caricamento icona " + percorso + ": " + e.getMessage());
+            return null;
         }
     }
 }
