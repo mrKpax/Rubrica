@@ -44,5 +44,8 @@ L'archivio del progetto rilasciato (`Rubrica.zip`) contiene:
      ```
 
 3. **Esecuzione del Software:**
-   * Eseguire il file JAR tramite doppio click.
+   * Eseguire il file JAR tramite doppio click o da terminale:
+   ```bash
+   java -jar Rubrica.jar
+   ```
    * Effettuare il login con le credenziali di default (`admin` / `password123`) per accedere alla rubrica.
